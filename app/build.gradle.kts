@@ -69,8 +69,18 @@ dependencies {
     kapt(libs.hilt.android.compiler)
 //    implementation(libs.hilt.lifecycle)
 //    implementation(libs.hilt.navigation)
-    implementation("androidx.navigation:navigation-compose:2.8.5")
+    implementation(libs.androidx.navigation.compose)
     testImplementation(libs.junit)
+
+    //coroutines
+    implementation(libs.kotlinx.coroutines.android)
+
+    //retrofit
+    implementation(libs.retrofit)
+
+    //gson
+    implementation(libs.google.gson)
+    implementation(libs.converter.gson)
 
     // mockito
     testImplementation(libs.mockito.core)

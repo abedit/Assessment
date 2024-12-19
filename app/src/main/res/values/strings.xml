@@ -4,5 +4,7 @@
     <string name="overview_title">COINS</string>
     <string name="empty_coins_list_message">No coins were found</string>
     <string name="coins_overview_toolbar_title">COINS</string>
+    <string name="api_fetch_error_message">Error: fetching coins failed</string>
+    <string name="api_fetch_error_message_with_data">Error: fetching coins failed - showing cached results</string>
 
 </resources>

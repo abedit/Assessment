@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -15,9 +16,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.abedit.aldiassessment.R
+import com.abedit.aldiassessment.ui.theme.Blue
+import com.abedit.aldiassessment.ui.theme.White
 
 @Composable
-fun EmptyListView() {
+fun EmptyListView(tryAgainAction: () -> Unit = {}) {
     //In case the coins list was empty,
     // show a message and an option to retry
 
@@ -37,7 +40,11 @@ fun EmptyListView() {
                     .padding(bottom = 8.dp)
             )
             Button(
-                onClick = { /*TODO*/ }
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Blue,
+                    contentColor = White
+                ),
+                onClick = { tryAgainAction.invoke() }
             ) {
                 Text(text = "Try again")
             }

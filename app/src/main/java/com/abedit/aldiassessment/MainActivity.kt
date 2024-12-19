@@ -21,7 +21,6 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge(
             statusBarStyle = SystemBarStyle.light(ContextCompat.getColor(this, R.color.status_bar_color), Color.TRANSPARENT)
         )
-        coinListViewModel.fetchCoins()
         setContent {
             CoinsOverview(
                 coinListViewModel
