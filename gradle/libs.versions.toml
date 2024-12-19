@@ -1,5 +1,6 @@
 [versions]
 agp = "8.5.2"
+hiltAndroidGradlePlugin = "2.52"
 kotlin = "1.9.0"
 coreKtx = "1.15.0"
 junit = "4.13.2"
@@ -8,6 +9,12 @@ espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.9.3"
 composeBom = "2024.04.01"
+hilt = "2.52"
+hilt_lifecycle = "1.0.0-alpha03"
+hilt_navigation = "1.2.0"
+mockito_core = "4.8.0"
+mockito_inline = "4.8.0"
+mockito_kotlin = "4.0.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -24,6 +31,13 @@ androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
+hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidGradlePlugin" }
+#hilt_lifecycle = { module = "androidx.hilt:hilt-lifecycle-viewmodel", version.ref = "hilt_lifecycle" }
+#hilt_navigation = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hilt_navigation" }
+mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito_core" }
+mockito-inline = { module = "org.mockito:mockito-inline", version.ref = "mockito_inline" }
+mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockito_kotlin" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
