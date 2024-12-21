@@ -13,3 +13,4 @@ val White = Color(0xFFFFFFFF)
 val ToolbarBackground = BlueishPurple
 val TextColor = Black
 val CoinsListBackground = Color(0xFFced4fb)
+val CoinListItemBackground = Color(0xFFe1e5fc)

@@ -1,6 +1,10 @@
 package com.abedit.aldiassessment.ui.sharedComponents
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideIn
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOut
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -39,7 +43,11 @@ fun Toolbar(
             .padding(15.dp)
     ) {
 
-        AnimatedVisibility(visible = showBackButton) {
+        AnimatedVisibility(
+            visible = showBackButton,
+            enter = slideInHorizontally(),
+            exit = slideOutHorizontally(),
+        ) {
             Icon(
                 modifier = Modifier
                     .padding(end = 10.dp)

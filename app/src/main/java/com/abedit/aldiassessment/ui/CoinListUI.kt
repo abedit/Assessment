@@ -45,7 +45,7 @@ fun CoinsOverview(coinListViewModel: CoinListViewModel) {
 
 @Composable
 fun CoinsOverview(listUiState: ListUiState, tryAgainAction: () -> Unit = {}) {
-//    val coinsList by coinListViewModel.coinsList.collectAsState()
+
     val snackbarHostState = remember { SnackbarHostState() }
 
     AldiAssessmentTheme {
@@ -59,7 +59,7 @@ fun CoinsOverview(listUiState: ListUiState, tryAgainAction: () -> Unit = {}) {
             ) {
 
                 /*
-                Structure:
+                UI structure:
                 * Toolbar
                 * CoinsList
                 */
@@ -86,13 +86,11 @@ fun CoinsOverview(listUiState: ListUiState, tryAgainAction: () -> Unit = {}) {
     val context = LocalContext.current
     LaunchedEffect(listUiState) {
         if (listUiState is ListUiState.Error) {
-            println("ListUI - listUIState is Error")
             snackbarHostState.showSnackbar(
                 message = context.getString(R.string.api_fetch_error_message),
                 duration = SnackbarDuration.Short
             )
         } else if (listUiState is ListUiState.ErrorListNotEmpty) {
-            println("ListUI - listUIState is ErrorNotEmpty")
             snackbarHostState.showSnackbar(
                 message = context.getString(R.string.api_fetch_error_message_with_data),
                 duration = SnackbarDuration.Short
@@ -146,11 +144,11 @@ private fun CoinsView(listUiState: ListUiState, tryAgainAction: () -> Unit) {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun CoinsOverviewSuccessPreview() {
-
-    val fakeList = listOf(
-        getPreviewCoin()
-    )
-    CoinsOverview(listUiState = ListUiState.Success(fakeList))
+    CoinsOverview(listUiState = ListUiState.Success(listOf(
+        getPreviewCoin(),
+        getPreviewCoin(),
+        getPreviewCoin(),
+    )))
 }
 
 @Preview(showBackground = true, showSystemUi = true)

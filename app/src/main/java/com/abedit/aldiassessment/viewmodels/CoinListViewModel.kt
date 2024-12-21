@@ -8,11 +8,15 @@ import com.abedit.aldiassessment.models.Coin
 import com.abedit.aldiassessment.overviewData.ListUiState
 import com.abedit.aldiassessment.repositories.CoinsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.Timer
 import javax.inject.Inject
 
@@ -38,9 +42,13 @@ class CoinListViewModel @Inject constructor(
     * */
     private fun startAutomaticRefresh() {
         refreshJob = viewModelScope.launch {
-            while (true) {
+            flow {
+                while (true) {
+                    emit(Unit)
+                    delay(REFRESH_TIME)
+                }
+            }.collect {
                 fetchCoins()
-                delay(REFRESH_TIME)
             }
         }
     }
@@ -81,7 +89,6 @@ class CoinListViewModel @Inject constructor(
                 }
 
             } catch (e: Exception) {
-                // API call failed - don't reset the list view but show an error message
                 _listUiState.value = ListUiState.Error
 
                 if (_coinsListStateFlow.value.isNotEmpty()) {
@@ -89,6 +96,7 @@ class CoinListViewModel @Inject constructor(
                 }
             }
         }
+
     }
 
     override fun onCleared() {

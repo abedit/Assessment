@@ -39,6 +39,7 @@ fun EmptyListView(tryAgainAction: () -> Unit = {}) {
                     .fillMaxWidth()
                     .padding(bottom = 8.dp)
             )
+            
             Button(
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Blue,
