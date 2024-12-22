@@ -10,6 +10,7 @@ class CoinsRepository @Inject constructor() {
 
     private val service = CoinService.create()
 
+    //fetch list of coins
     suspend fun getCoinsList(): List<Coin> = withContext(Dispatchers.IO) {
         val response = service.getCoins()
         if (response.isSuccessful) {
@@ -18,5 +19,17 @@ class CoinsRepository @Inject constructor() {
             throw Exception("Error: fetching coins failed")
         }
     }
+
+    //fetch coin data by id, this is for the details screen
+    suspend fun getCoinById(coinId: String): Coin? = withContext(Dispatchers.IO) {
+        val response = service.getCoinById(coinId)
+        if (response.isSuccessful) {
+            response.body()?.data
+        } else {
+            throw Exception("Error: fetching coin info failed")
+        }
+    }
+
+
 
 }

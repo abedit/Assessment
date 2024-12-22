@@ -4,6 +4,7 @@ plugins {
     id("kotlin-android")
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+    kotlin("plugin.serialization") version "2.0.21"
 }
 
 android {
@@ -68,7 +69,7 @@ dependencies {
     implementation(libs.hilt)
     kapt(libs.hilt.android.compiler)
 //    implementation(libs.hilt.lifecycle)
-//    implementation(libs.hilt.navigation)
+    implementation(libs.hilt.navigation)
     implementation(libs.androidx.navigation.compose)
     testImplementation(libs.junit)
 
@@ -86,6 +87,13 @@ dependencies {
     testImplementation(libs.mockito.core)
     testImplementation(libs.mockito.inline)
     testImplementation(libs.mockito.kotlin)
+
+    //navigation
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.navigation.fragment)
+    implementation(libs.androidx.navigation.ui)
+    implementation(libs.androidx.navigation.dynamic.features.fragment)
+    androidTestImplementation(libs.androidx.navigation.testing)
 
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

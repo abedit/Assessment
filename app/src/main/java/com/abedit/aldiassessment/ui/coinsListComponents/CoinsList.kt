@@ -1,6 +1,7 @@
-package com.abedit.aldiassessment.ui.coinsOverview
+package com.abedit.aldiassessment.ui.coinsListComponents
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,14 +33,20 @@ import com.abedit.aldiassessment.coinId2IconId
 import com.abedit.aldiassessment.formattedPercentage
 import com.abedit.aldiassessment.formattedPrice
 import com.abedit.aldiassessment.getPreviewCoin
-import com.abedit.aldiassessment.hasPriceIncreased
+import com.abedit.aldiassessment.hasPercentageIncreased
 import com.abedit.aldiassessment.models.Coin
+import com.abedit.aldiassessment.ui.theme.CoinDisplayText
 import com.abedit.aldiassessment.ui.theme.CoinListItemBackground
+import com.abedit.aldiassessment.ui.theme.CoinsListBackground
 import com.abedit.aldiassessment.ui.theme.Green
 import com.abedit.aldiassessment.ui.theme.Red
 
 @Composable
-fun CoinsList(coinsList: List<Coin>, lazyColumnState: LazyListState) {
+fun CoinsList(
+    coinsList: List<Coin>,
+    lazyColumnState: LazyListState,
+    navigateToDetails: (Coin) -> Unit
+) {
     //show the list of coins
     LazyColumn(
         state = lazyColumnState,
@@ -48,16 +55,19 @@ fun CoinsList(coinsList: List<Coin>, lazyColumnState: LazyListState) {
             .padding(horizontal = 15.dp, vertical = 6.dp)
     ) {
         items(items = coinsList) { mCoin ->
-            CoinListItem(mCoin = mCoin)
-
+            CoinListItem(
+                mCoin = mCoin,
+                modifier = Modifier.clickable {
+                    navigateToDetails(mCoin)
+                })
         }
     }
 }
 
 @Composable
-private fun CoinListItem(mCoin: Coin) {
+private fun CoinListItem(mCoin: Coin, modifier: Modifier) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .padding(vertical = 6.dp)
     ) {
 
@@ -81,8 +91,8 @@ private fun CoinListItem(mCoin: Coin) {
             )
 
 
-            CoinDetails(
-                coinId = mCoin.id,
+            CoinBasicInfo(
+                coinId = mCoin.name?: NULL_VALUE_PLACEHOLDER,
                 coinSymbol = mCoin.symbol ?: NULL_VALUE_PLACEHOLDER,
                 modifier = Modifier.weight(1f)
             )
@@ -90,7 +100,7 @@ private fun CoinListItem(mCoin: Coin) {
             CoinPrice(
                 coinPriceUsd = mCoin.priceUsd.formattedPrice(),
                 coinChangePercent = mCoin.changePercent24Hr.formattedPercentage(),
-                hasIncreased = mCoin.changePercent24Hr.hasPriceIncreased,
+                hasIncreased = mCoin.changePercent24Hr.hasPercentageIncreased,
                 modifier = Modifier.weight(0.5f)
             )
 
@@ -103,28 +113,28 @@ private fun CoinIcon(coinId: String, modifier: Modifier) {
     Icon(
         painter = painterResource(id = coinId.coinId2IconId()),
         contentDescription = "",
-        modifier = modifier
-            .size(50.dp),
+        modifier = modifier.size(50.dp),
         tint = Color.Unspecified
     )
 }
 
 @Composable
-private fun CoinDetails(
+private fun CoinBasicInfo(
     coinId: String,
     coinSymbol: String,
     modifier: Modifier
 ) {
     Column(
         modifier = modifier
-            .padding(start = 15.dp)
+            .padding(start = 15.dp, top = 5.dp)
             .fillMaxHeight(),
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = coinId,
+            text = coinId.uppercase(),
             fontWeight = FontWeight.SemiBold,
             maxLines = 1,
+            color = CoinDisplayText,
             overflow = TextOverflow.Ellipsis,
             fontSize = 19.sp,
             modifier = Modifier
@@ -136,8 +146,9 @@ private fun CoinDetails(
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             fontSize = 15.sp,
+            color = CoinDisplayText,
             modifier = Modifier
-                .padding(top = 2.dp, bottom = 4.dp),
+                .padding(top = 3.dp, bottom = 4.dp),
         )
     }
 }
@@ -151,7 +162,7 @@ private fun CoinPrice(
 ) {
     Column(
         modifier = modifier
-            .padding(start = 2.dp, end = 2.dp)
+            .padding(start = 2.dp, end = 2.dp, top = 7.dp)
             .fillMaxHeight(),
         verticalArrangement = Arrangement.Center
     ) {
@@ -159,6 +170,7 @@ private fun CoinPrice(
             text = coinPriceUsd,
             fontWeight = FontWeight.SemiBold,
             fontSize = 15.sp,
+            color = CoinDisplayText,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier
@@ -173,8 +185,9 @@ private fun CoinPrice(
             fontSize = 15.sp,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.align(Alignment.End)
-                .padding(top = 3.dp, bottom = 4.dp),
+            modifier = Modifier
+                .align(Alignment.End)
+                .padding(top = 0.dp, bottom = 4.dp),
             color = if (hasIncreased) Green else Red
         )
     }
@@ -183,8 +196,12 @@ private fun CoinPrice(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun DefaultPreview() {
-    CoinsList(
-        coinsList = listOf(getPreviewCoin(), getPreviewCoin(), getPreviewCoin()),
-        lazyColumnState = rememberLazyListState()
-    )
+    Box(modifier = Modifier.background(CoinsListBackground)) {
+        CoinsList(
+            coinsList = listOf(getPreviewCoin(), getPreviewCoin(), getPreviewCoin()),
+            lazyColumnState = rememberLazyListState(),
+            navigateToDetails = {}
+        )
+    }
+
 }

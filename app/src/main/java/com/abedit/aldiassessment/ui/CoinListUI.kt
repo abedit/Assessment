@@ -29,9 +29,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.abedit.aldiassessment.R
 import com.abedit.aldiassessment.getPreviewCoin
-import com.abedit.aldiassessment.overviewData.ListUiState
-import com.abedit.aldiassessment.ui.coinsOverview.CoinsList
-import com.abedit.aldiassessment.ui.coinsOverview.EmptyListView
+import com.abedit.aldiassessment.models.Coin
+import com.abedit.aldiassessment.states.ListUiState
+import com.abedit.aldiassessment.ui.coinsListComponents.CoinsList
+import com.abedit.aldiassessment.ui.coinsListComponents.EmptyListView
 import com.abedit.aldiassessment.ui.sharedComponents.Toolbar
 import com.abedit.aldiassessment.ui.theme.AldiAssessmentTheme
 import com.abedit.aldiassessment.ui.theme.Blue
@@ -39,14 +40,23 @@ import com.abedit.aldiassessment.ui.theme.CoinsListBackground
 import com.abedit.aldiassessment.ui.theme.ToolbarBackground
 import com.abedit.aldiassessment.viewmodels.CoinListViewModel
 
+
 @Composable
-fun CoinsOverview(coinListViewModel: CoinListViewModel) {
+fun CoinsListView(coinListViewModel: CoinListViewModel, navigateToDetails: (Coin) -> Unit) {
     val listUiState by coinListViewModel.uiState.collectAsState()
-    CoinsOverview(listUiState = listUiState, tryAgainAction = { coinListViewModel.fetchCoins() })
+    CoinsListView(
+        listUiState = listUiState,
+        tryAgainAction = { coinListViewModel.fetchCoins() },
+        navigateToDetails = navigateToDetails
+    )
 }
 
 @Composable
-fun CoinsOverview(listUiState: ListUiState, tryAgainAction: () -> Unit = {}) {
+private fun CoinsListView(
+    listUiState: ListUiState,
+    tryAgainAction: () -> Unit = {},
+    navigateToDetails: (Coin) -> Unit = {}
+) {
 
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -70,8 +80,7 @@ fun CoinsOverview(listUiState: ListUiState, tryAgainAction: () -> Unit = {}) {
                 */
                 Toolbar(
                     modifier = Modifier.background(ToolbarBackground),
-                    title = stringResource(R.string.coins_overview_toolbar_title),
-                    showBackButton = false
+                    title = stringResource(R.string.coins_overview_toolbar_title)
                 )
 
                 Box(
@@ -82,7 +91,9 @@ fun CoinsOverview(listUiState: ListUiState, tryAgainAction: () -> Unit = {}) {
                     CoinsView(
                         listUiState = listUiState,
                         tryAgainAction = tryAgainAction,
-                        lazyColumnState = lazyColumnState)
+                        lazyColumnState = lazyColumnState,
+                        navigateToDetails = navigateToDetails
+                    )
                 }
 
             }
@@ -93,12 +104,7 @@ fun CoinsOverview(listUiState: ListUiState, tryAgainAction: () -> Unit = {}) {
     //Show snackbar based on the UIState
     val context = LocalContext.current
     LaunchedEffect(listUiState) {
-        if (listUiState is ListUiState.Error) {
-            snackbarHostState.showSnackbar(
-                message = context.getString(R.string.api_fetch_error_message),
-                duration = SnackbarDuration.Short
-            )
-        } else if (listUiState is ListUiState.ErrorListNotEmpty) {
+        if (listUiState is ListUiState.ErrorListNotEmpty) {
             snackbarHostState.showSnackbar(
                 message = context.getString(R.string.api_fetch_error_message_with_data),
                 duration = SnackbarDuration.Short
@@ -107,11 +113,13 @@ fun CoinsOverview(listUiState: ListUiState, tryAgainAction: () -> Unit = {}) {
     }
 }
 
+//The main view for the list and the progress indicator
 @Composable
 private fun CoinsView(
     listUiState: ListUiState,
     tryAgainAction: () -> Unit,
-    lazyColumnState: LazyListState
+    lazyColumnState: LazyListState,
+    navigateToDetails: (Coin) -> Unit
 ) {
 
     // show progress indicator if list is empty
@@ -139,38 +147,50 @@ private fun CoinsView(
         exit = fadeOut(),
     ) {
         when (listUiState) {
-            is ListUiState.Success -> CoinsList(coinsList = listUiState.items, lazyColumnState = lazyColumnState)
-            is ListUiState.ErrorListNotEmpty -> CoinsList(coinsList = listUiState.items, lazyColumnState = lazyColumnState)
+            is ListUiState.Success -> {
+                CoinsList(
+                    coinsList = listUiState.items,
+                    lazyColumnState = lazyColumnState,
+                    navigateToDetails = navigateToDetails
+                )
+            }
+
+            is ListUiState.ErrorListNotEmpty -> CoinsList(
+                coinsList = listUiState.items,
+                lazyColumnState = lazyColumnState,
+                navigateToDetails = navigateToDetails
+            )
+
             is ListUiState.Empty -> EmptyListView(tryAgainAction = tryAgainAction)
-            else -> {} //Loading or Error - already handled
+            else -> {} //Loading - already handled
         }
     }
 
 }
 
 
-
-
-
-
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun CoinsOverviewSuccessPreview() {
-    CoinsOverview(listUiState = ListUiState.Success(listOf(
-        getPreviewCoin(),
-        getPreviewCoin(),
-        getPreviewCoin(),
-    )))
+private fun CoinsOverviewSuccessPreview() {
+    CoinsListView(
+        listUiState = ListUiState.Success(
+            listOf(
+                getPreviewCoin(),
+                getPreviewCoin(),
+                getPreviewCoin(),
+            )
+        )
+    )
 }
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun CoinsOverviewLoadingPreview() {
-    CoinsOverview(listUiState = ListUiState.Loading)
+private fun CoinsOverviewLoadingPreview() {
+    CoinsListView(listUiState = ListUiState.Loading)
 }
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun CoinsOverviewEmptyPreview() {
-    CoinsOverview(listUiState = ListUiState.Empty)
+private fun CoinsOverviewEmptyPreview() {
+    CoinsListView(listUiState = ListUiState.Empty)
 }

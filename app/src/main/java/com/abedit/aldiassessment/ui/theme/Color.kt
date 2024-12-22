@@ -11,6 +11,12 @@ val White = Color(0xFFFFFFFF)
 
 
 val ToolbarBackground = BlueishPurple
-val TextColor = Black
+
 val CoinsListBackground = Color(0xFFced4fb)
-val CoinListItemBackground = Color(0xFFe1e5fc)
+val CoinsDetailsBackground = CoinsListBackground
+
+val CoinListItemBackground = White.copy(alpha = 0.4f)
+val CoinDetailsItemBackground = CoinListItemBackground
+val CoinDetailsItemLoadingBackground = White.copy(alpha = 0.65f)
+
+val CoinDisplayText = Color(0xFF292E33)

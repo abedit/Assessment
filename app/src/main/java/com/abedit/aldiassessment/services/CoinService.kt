@@ -1,6 +1,7 @@
 package com.abedit.aldiassessment.services
 
 import com.abedit.aldiassessment.BASE_URL
+import com.abedit.aldiassessment.COINS_FROM_API_LIMIT
 import com.abedit.aldiassessment.GET_COINS_API
 import com.abedit.aldiassessment.GET_COINS_WITH_ID_API
 import com.abedit.aldiassessment.models.CoinsResponse
@@ -17,7 +18,7 @@ import java.util.concurrent.TimeUnit
 interface CoinService {
 
     @GET(GET_COINS_API)
-    suspend fun getCoins(@Query("limit") limit: Int = 10): Response<CoinsResponse>
+    suspend fun getCoins(@Query("limit") limit: Int = COINS_FROM_API_LIMIT): Response<CoinsResponse>
 
     @GET(GET_COINS_WITH_ID_API)
     suspend fun getCoinById(@Path("id") id: String): Response<SingleCoinResponse>
@@ -25,6 +26,7 @@ interface CoinService {
 
     companion object {
         fun create(): CoinService {
+            //we don't want the user to wait a lot for the response
             val okHttpClient = OkHttpClient.Builder()
                 .connectTimeout(5, TimeUnit.SECONDS)
                 .readTimeout(5, TimeUnit.SECONDS)

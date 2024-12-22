@@ -1,8 +1,6 @@
 package com.abedit.aldiassessment.models
 
-import com.abedit.aldiassessment.NULL_VALUE_PLACEHOLDER
 import com.google.gson.annotations.SerializedName
-import java.util.Locale
 
 data class Coin(
     @SerializedName("id")

@@ -1,17 +1,14 @@
 package com.abedit.aldiassessment.ui.sharedComponents
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.slideIn
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOut
-import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,11 +18,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.abedit.aldiassessment.R
-import com.abedit.aldiassessment.ui.theme.TextColor
+import com.abedit.aldiassessment.ui.theme.CoinDisplayText
 import com.abedit.aldiassessment.ui.theme.ToolbarBackground
 
 
@@ -33,7 +31,7 @@ import com.abedit.aldiassessment.ui.theme.ToolbarBackground
 fun Toolbar(
     modifier: Modifier = Modifier,
     title: String,
-    showBackButton: Boolean = false,
+    backButtonClicked: (() -> Unit)? = null
 ) {
 
     Row(
@@ -44,17 +42,18 @@ fun Toolbar(
     ) {
 
         AnimatedVisibility(
-            visible = showBackButton,
-            enter = slideInHorizontally(),
-            exit = slideOutHorizontally(),
+            visible = backButtonClicked != null,
+            enter = fadeIn(),
+            exit = fadeOut(),
         ) {
             Icon(
                 modifier = Modifier
                     .padding(end = 10.dp)
+                    .clickable { backButtonClicked?.invoke() }
                     .size(20.dp),
                 painter = painterResource(R.drawable.arrow_back),
                 tint = Color.Black,
-                contentDescription = null
+                contentDescription = title,
             )
         }
 
@@ -64,11 +63,11 @@ fun Toolbar(
             text = title,
             modifier = Modifier
                 .align(Alignment.CenterVertically),
-            style = TextStyle(
-                fontWeight = FontWeight.Bold,
-                color = TextColor
-            ),
-            fontSize = 18.sp
+            fontWeight = FontWeight.Bold,
+            color = CoinDisplayText,
+            fontSize = 18.sp,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
         )
     }
 
@@ -84,5 +83,5 @@ fun Preview_HomeScreen() {
 @Preview(showBackground = true)
 @Composable
 fun Preview_DetailsScreen() {
-    Toolbar(title = "Ethereum", showBackButton = true)
+    Toolbar(title = "Ethereum", backButtonClicked = {})
 }

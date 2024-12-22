@@ -8,16 +8,18 @@ fun String.coinId2IconId(): Int {
 }
 
 //to know whether to show green or red color
-val String?.hasPriceIncreased: Boolean
+val String?.hasPercentageIncreased: Boolean
     get() = (this?.toFloatOrNull() ?: 0f) > 0f
 
 
+//using abbreviations (K for thousands, M for millions and B for billions)
+//price is in USD therefore the US locale can be used
+//Example: 28610 -> 28.61K
 fun String?.formattedPrice(): String {
     if (this.isNullOrBlank())
         return NULL_VALUE_PLACEHOLDER
 
-    //using abbreviations (K for thousands, M for millions and B for billions)
-    //price is in USD therefore the US locale can be used
+
     return try {
         val value = this.toDouble()
         when {
@@ -32,10 +34,10 @@ fun String?.formattedPrice(): String {
 
 }
 
+//two digits after the decimal and add percentage sign
 fun String?.formattedPercentage(): String {
     if (this.isNullOrBlank())
         return NULL_VALUE_PLACEHOLDER
-    //two digits after the decimal and add percentage sign
     return try {
         val value = this.toDouble()
         String.format(Locale.US, "%.2f%%", value)
