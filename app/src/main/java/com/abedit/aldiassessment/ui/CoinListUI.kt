@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
@@ -48,6 +50,9 @@ fun CoinsOverview(listUiState: ListUiState, tryAgainAction: () -> Unit = {}) {
 
     val snackbarHostState = remember { SnackbarHostState() }
 
+    //would like to save the scroll position after automatic refresh
+    val lazyColumnState = rememberLazyListState()
+
     AldiAssessmentTheme {
         Scaffold(
             snackbarHost = { SnackbarHost(snackbarHostState) }
@@ -74,7 +79,10 @@ fun CoinsOverview(listUiState: ListUiState, tryAgainAction: () -> Unit = {}) {
                         .fillMaxSize()
                         .background(CoinsListBackground)
                 ) {
-                    CoinsView(listUiState = listUiState, tryAgainAction = tryAgainAction)
+                    CoinsView(
+                        listUiState = listUiState,
+                        tryAgainAction = tryAgainAction,
+                        lazyColumnState = lazyColumnState)
                 }
 
             }
@@ -100,7 +108,11 @@ fun CoinsOverview(listUiState: ListUiState, tryAgainAction: () -> Unit = {}) {
 }
 
 @Composable
-private fun CoinsView(listUiState: ListUiState, tryAgainAction: () -> Unit) {
+private fun CoinsView(
+    listUiState: ListUiState,
+    tryAgainAction: () -> Unit,
+    lazyColumnState: LazyListState
+) {
 
     // show progress indicator if list is empty
     AnimatedVisibility(
@@ -127,8 +139,8 @@ private fun CoinsView(listUiState: ListUiState, tryAgainAction: () -> Unit) {
         exit = fadeOut(),
     ) {
         when (listUiState) {
-            is ListUiState.Success -> CoinsList(coinsList = listUiState.items)
-            is ListUiState.ErrorListNotEmpty -> CoinsList(coinsList = listUiState.items)
+            is ListUiState.Success -> CoinsList(coinsList = listUiState.items, lazyColumnState = lazyColumnState)
+            is ListUiState.ErrorListNotEmpty -> CoinsList(coinsList = listUiState.items, lazyColumnState = lazyColumnState)
             is ListUiState.Empty -> EmptyListView(tryAgainAction = tryAgainAction)
             else -> {} //Loading or Error - already handled
         }

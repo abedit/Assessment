@@ -13,8 +13,7 @@ class CoinsRepository @Inject constructor() {
     suspend fun getCoinsList(): List<Coin> = withContext(Dispatchers.IO) {
         val response = service.getCoins()
         if (response.isSuccessful) {
-            val coinsList = response.body()?.data ?: emptyList()
-            coinsList.sortedBy { it.rank?.toIntOrNull() }.take(10)
+            response.body()?.data ?: emptyList()
         } else {
             throw Exception("Error: fetching coins failed")
         }

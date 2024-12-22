@@ -80,7 +80,6 @@ class CoinListViewModel @Inject constructor(
 
             try {
                 val coinsList = repository.getCoinsList()
-
                 if (coinsList.isEmpty()) {
                     _listUiState.value = ListUiState.Empty
                 } else {
