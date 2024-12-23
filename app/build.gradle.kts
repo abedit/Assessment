@@ -51,7 +51,10 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
 }
+
+
 
 dependencies {
 
@@ -67,8 +70,14 @@ dependencies {
 
     //hilt
     implementation(libs.hilt)
+    testImplementation(libs.jupiter.junit.jupiter)
+    testImplementation(libs.jupiter.junit.jupiter)
+    testImplementation(libs.jupiter.junit.jupiter)
+    testImplementation(libs.jupiter.junit.jupiter)
+    testImplementation(libs.jupiter.junit.jupiter)
+    testImplementation(libs.jupiter.junit.jupiter)
+    testImplementation(libs.jupiter.junit.jupiter)
     kapt(libs.hilt.android.compiler)
-//    implementation(libs.hilt.lifecycle)
     implementation(libs.hilt.navigation)
     implementation(libs.androidx.navigation.compose)
     testImplementation(libs.junit)
@@ -87,6 +96,7 @@ dependencies {
     testImplementation(libs.mockito.core)
     testImplementation(libs.mockito.inline)
     testImplementation(libs.mockito.kotlin)
+    testImplementation(libs.kotlinx.coroutines.test)
 
     //navigation
     implementation(libs.androidx.navigation.compose)
@@ -94,6 +104,15 @@ dependencies {
     implementation(libs.androidx.navigation.ui)
     implementation(libs.androidx.navigation.dynamic.features.fragment)
     androidTestImplementation(libs.androidx.navigation.testing)
+
+    //Junit 5
+    testImplementation(libs.junit.jupiter)
+    testImplementation(libs.junit.jupiter.api)
+    testRuntimeOnly(libs.junit.jupiter.engine)
+    testImplementation(libs.junit.jupiter.params)
+
+
+
 
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -105,4 +124,8 @@ dependencies {
 
 kapt {
     correctErrorTypes = true
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
 }

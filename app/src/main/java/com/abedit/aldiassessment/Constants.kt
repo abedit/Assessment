@@ -11,16 +11,13 @@ const val COINS_FROM_API_LIMIT = 10
 
 fun getPreviewCoin() = Coin( //fake Coin just for preview purposes in compose
     id = "bitcoin",
-    rank = "1",
     symbol = "BTC",
     name = "Bitcoin",
     supply = "21000000",
-    maxSupply = "21000000",
     marketCapUsd = "90000000000",
     volumeUsd24Hr = "10000000",
     priceUsd = "45000",
     changePercent24Hr = "1.2",
-    vwap24Hr = "44800"
 )
 
 val ICON_ID_2_IMAGE_MAP = mapOf(

@@ -23,10 +23,10 @@ fun String?.formattedPrice(): String {
     return try {
         val value = this.toDouble()
         when {
-            value >= BILLION -> String.format(Locale.US,"\$%.2fB", value / BILLION)
-            value >= MILLION -> String.format(Locale.US,"\$%.2fM", value / MILLION)
-            value >= THOUSAND -> String.format(Locale.US,"\$%.2fK", value / THOUSAND)
-            else -> String.format(Locale.US,"\$%.2f", value)
+            value >= BILLION -> String.format(Locale.US,"$%.2fB", value / BILLION)
+            value >= MILLION -> String.format(Locale.US,"$%.2fM", value / MILLION)
+            value >= THOUSAND -> String.format(Locale.US,"$%.2fK", value / THOUSAND)
+            else -> String.format(Locale.US,"$%.2f", value)
         }
     } catch (e: NumberFormatException) {
         this

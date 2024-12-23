@@ -6,33 +6,24 @@ data class Coin(
     @SerializedName("id")
     val id: String,
 
-    @SerializedName("rank")
-    val rank: String?,
-
     @SerializedName("symbol")
-    val symbol: String?,
+    val symbol: String? = null,
 
     @SerializedName("name")
-    val name: String?,
+    val name: String? = null,
 
     @SerializedName("supply")
-    val supply: String?,
-
-    @SerializedName("maxSupply")
-    val maxSupply: String?,
+    val supply: String? = null,
 
     @SerializedName("marketCapUsd")
-    val marketCapUsd: String?,
+    val marketCapUsd: String? = null,
 
     @SerializedName("volumeUsd24Hr")
-    val volumeUsd24Hr: String?,
+    val volumeUsd24Hr: String? = null,
 
     @SerializedName("priceUsd")
-    val priceUsd: String?,
+    val priceUsd: String? = null,
 
     @SerializedName("changePercent24Hr")
-    val changePercent24Hr: String?,
-
-    @SerializedName("vwap24Hr")
-    val vwap24Hr: String?,
+    val changePercent24Hr: String? = null
 )
