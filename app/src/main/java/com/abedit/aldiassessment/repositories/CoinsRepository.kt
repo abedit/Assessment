@@ -6,9 +6,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class CoinsRepository @Inject constructor() {
-
-    private val service = CoinService.create()
+class CoinsRepository @Inject constructor(
+    private val service: CoinService
+) {
 
     //fetch list of coins
     suspend fun getCoinsList(): List<Coin> = withContext(Dispatchers.IO) {
