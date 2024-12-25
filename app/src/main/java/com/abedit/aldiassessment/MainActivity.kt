@@ -36,6 +36,7 @@ class MainActivity : ComponentActivity() {
                 ), Color.TRANSPARENT
             )
         )
+
         setContent {
             CoinAppNavigation()
         }

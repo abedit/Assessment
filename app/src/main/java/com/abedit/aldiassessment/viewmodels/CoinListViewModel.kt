@@ -21,9 +21,10 @@ class CoinListViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _coinsListStateFlow = MutableStateFlow<List<Coin>>(emptyList())
-
     private val _listUiState = MutableStateFlow<ListUiState>(ListUiState.Loading)
+
     val uiState: StateFlow<ListUiState> = _listUiState
+
     private var refreshJob: Job? = null
     private var fetchJob: Job? = null
 
@@ -79,11 +80,11 @@ class CoinListViewModel @Inject constructor(
                 }
 
             } catch (e: Exception) {
-                if (_coinsListStateFlow.value.isNotEmpty()) {
-                    _listUiState.value = ListUiState.ErrorListNotEmpty(_coinsListStateFlow.value)
-                } else {
-                    _listUiState.value = ListUiState.Empty
-                }
+                _listUiState.value =
+                    if (_coinsListStateFlow.value.isNotEmpty())
+                        ListUiState.ErrorListNotEmpty(_coinsListStateFlow.value)
+                    else
+                        ListUiState.Empty
             }
         }
 

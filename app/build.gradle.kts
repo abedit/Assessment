@@ -66,10 +66,11 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    implementation(libs.androidx.material3)
 
     //hilt
     implementation(libs.hilt)
+    testImplementation(libs.jupiter.junit.jupiter)
+    testImplementation(libs.jupiter.junit.jupiter)
     testImplementation(libs.jupiter.junit.jupiter)
     testImplementation(libs.jupiter.junit.jupiter)
     testImplementation(libs.jupiter.junit.jupiter)
@@ -82,8 +83,10 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     testImplementation(libs.junit)
 
+
     //coroutines
     implementation(libs.kotlinx.coroutines.android)
+    testImplementation(libs.kotlinx.coroutines.test)
 
     //retrofit
     implementation(libs.retrofit)
@@ -96,7 +99,6 @@ dependencies {
     testImplementation(libs.mockito.core)
     testImplementation(libs.mockito.inline)
     testImplementation(libs.mockito.kotlin)
-    testImplementation(libs.kotlinx.coroutines.test)
 
     //navigation
     implementation(libs.androidx.navigation.compose)

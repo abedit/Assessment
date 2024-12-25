@@ -13,5 +13,6 @@
     <string name="coin_details_caption_market_cap">Market Cap</string>
     <string name="coin_details_caption_volume_24h">Volume (24h)</string>
     <string name="coin_details_caption_supply">Supply</string>
+    <string name="try_again">Try again</string>
 
 </resources>

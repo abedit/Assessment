@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.sp
 import com.abedit.aldiassessment.ui.theme.CoinDisplayText
 
 @Composable
-fun DisplayItem(
+fun DetailDisplayItem(
     caption: String,
     value: String,
     textColor: Color = CoinDisplayText
@@ -41,7 +41,7 @@ fun DisplayItem(
 }
 
 @Composable
-@Preview
+@Preview(showBackground = true)
 private fun DisplayItemPreview() {
-    DisplayItem(caption = "Price", value = "$3K")
+    DetailDisplayItem(caption = "Price", value = "$3K")
 }

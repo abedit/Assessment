@@ -4,10 +4,10 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2024-12-18T23:57:31.599452500Z">
+        <DropdownSelection timestamp="2024-12-25T02:49:51.617556100Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\abedi\.android\avd\Phone_3.avd" />
+              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\abedi\.android\avd\Samsung_A32_API_30.avd" />
             </handle>
           </Target>
         </DropdownSelection>

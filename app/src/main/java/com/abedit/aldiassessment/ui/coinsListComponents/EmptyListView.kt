@@ -15,6 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.abedit.aldiassessment.R
 import com.abedit.aldiassessment.ui.theme.Blue
 import com.abedit.aldiassessment.ui.theme.White
@@ -47,7 +48,10 @@ fun EmptyListView(tryAgainAction: () -> Unit = {}) {
                 ),
                 onClick = { tryAgainAction.invoke() }
             ) {
-                Text(text = "Try again")
+                Text(
+                    text = stringResource(R.string.try_again),
+                    fontSize = 16.sp
+                )
             }
         }
     }

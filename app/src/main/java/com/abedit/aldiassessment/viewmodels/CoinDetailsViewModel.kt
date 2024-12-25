@@ -32,7 +32,7 @@ class CoinDetailsViewModel @Inject constructor(
     private var refreshJob: Job? = null
     private var fetchJob: Job? = null
 
-    private val _detailUiState = MutableStateFlow<DetailsUiState>(DetailsUiState.NotLoading)
+    private val _detailUiState = MutableStateFlow<DetailsUiState>(DetailsUiState.Loading)
     val uiState: StateFlow<DetailsUiState> = _detailUiState
 
     /*
@@ -70,7 +70,7 @@ class CoinDetailsViewModel @Inject constructor(
     /*
     * Call the API and update the DetailsUiState
     * */
-    private fun fetchCoinInfo() {
+    fun fetchCoinInfo() {
 
         //cancel previous job
         fetchJob?.cancel()
@@ -84,6 +84,8 @@ class CoinDetailsViewModel @Inject constructor(
                 _detailUiState.value = DetailsUiState.NotLoading
                 if (coinResponse != null) {
                     _currentCoin.value = coinResponse
+                } else {
+                    _detailUiState.value = DetailsUiState.Error
                 }
 
             } catch (e: Exception) {

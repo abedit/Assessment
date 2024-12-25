@@ -6,45 +6,39 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.abedit.aldiassessment.NULL_VALUE_PLACEHOLDER
-import com.abedit.aldiassessment.R
 import com.abedit.aldiassessment.formattedPercentage
 import com.abedit.aldiassessment.formattedPrice
 import com.abedit.aldiassessment.getPreviewCoin
-import com.abedit.aldiassessment.hasPercentageIncreased
 import com.abedit.aldiassessment.states.DetailsUiState
-import com.abedit.aldiassessment.ui.sharedComponents.DisplayItem
+import com.abedit.aldiassessment.ui.coinDetailsComponents.CoinDetailsBox
+import com.abedit.aldiassessment.ui.coinDetailsComponents.CoinDetailsError
+import com.abedit.aldiassessment.ui.coinDetailsComponents.CoinDetailsOverview
 import com.abedit.aldiassessment.ui.sharedComponents.Toolbar
 import com.abedit.aldiassessment.ui.theme.AldiAssessmentTheme
 import com.abedit.aldiassessment.ui.theme.Blue
-import com.abedit.aldiassessment.ui.theme.CoinDetailsItemBackground
 import com.abedit.aldiassessment.ui.theme.CoinDetailsItemLoadingBackground
-import com.abedit.aldiassessment.ui.theme.CoinDisplayText
 import com.abedit.aldiassessment.ui.theme.CoinsDetailsBackground
-import com.abedit.aldiassessment.ui.theme.Green
-import com.abedit.aldiassessment.ui.theme.Red
 import com.abedit.aldiassessment.ui.theme.ToolbarBackground
 import com.abedit.aldiassessment.viewmodels.CoinDetailsViewModel
 
@@ -62,10 +56,12 @@ fun CoinDetailsView(viewModel: CoinDetailsViewModel, backButtonClicked: () -> Un
         marketCap = coin.marketCapUsd.formattedPrice(),
         volume24h = coin.volumeUsd24Hr.formattedPrice(),
         supply = coin.supply.formattedPrice(),
-        backButtonClicked = backButtonClicked
+        backButtonClicked = backButtonClicked,
+        tryAgainClicked = { viewModel.fetchCoinInfo() }
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun CoinsDetailsView(
     detailsUiState: DetailsUiState,
@@ -74,8 +70,12 @@ private fun CoinsDetailsView(
     percentChange: String,
     marketCap: String,
     volume24h: String, supply: String,
-    backButtonClicked: () -> Unit
+    backButtonClicked: () -> Unit,
+    tryAgainClicked: () -> Unit
 ) {
+    val pullToRefreshState = rememberPullToRefreshState()
+    var isRefreshing by remember { mutableStateOf(false) }
+
     AldiAssessmentTheme {
         Scaffold { innerPadding ->
             Column(
@@ -86,9 +86,10 @@ private fun CoinsDetailsView(
                 /*
                 UI structure:
                 * Toolbar
-                * 2 x Row
-                * Line
-                * 3 x Row
+                * CoinDetailsView
+                *   2 x Row
+                *   Line
+                *   3 x Row
                 */
                 Toolbar(
                     modifier = Modifier.background(ToolbarBackground),
@@ -96,19 +97,34 @@ private fun CoinsDetailsView(
                     backButtonClicked = backButtonClicked
                 )
 
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(CoinsDetailsBackground)
+
+//                LaunchedEffect(detailsUiState) {
+//                    isRefreshing = false
+//                }
+
+                PullToRefreshBox(
+                    isRefreshing = isRefreshing,
+                    onRefresh = {
+                        isRefreshing = true
+                        tryAgainClicked.invoke()
+                    },
+                    state = pullToRefreshState,
                 ) {
-                    CoinDetailsView(
-                        detailsUiState = detailsUiState,
-                        price = price,
-                        percentChange = percentChange,
-                        marketCap = marketCap,
-                        volume24h = volume24h,
-                        supply = supply
-                    )
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(CoinsDetailsBackground)
+                    ) {
+                        CoinDetailsView(
+                            detailsUiState = detailsUiState,
+                            price = price,
+                            percentChange = percentChange,
+                            marketCap = marketCap,
+                            volume24h = volume24h,
+                            supply = supply,
+                            tryAgainClicked = tryAgainClicked
+                        )
+                    }
                 }
             }
         }
@@ -116,72 +132,76 @@ private fun CoinsDetailsView(
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun CoinDetailsView(
     detailsUiState: DetailsUiState,
     price: String, percentChange: String, marketCap: String,
     volume24h: String, supply: String,
+    tryAgainClicked: () -> Unit
 ) {
 
     val roundedCornerShape = RoundedCornerShape(12.dp)
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(start = 20.dp, end = 20.dp, top = 15.dp, bottom = 30.dp)
-            .background(CoinDetailsItemBackground, roundedCornerShape)
+
+    /*
+    * Show the details overview
+    * if loading -> keep the details overview visible but overlay the loading view
+    * if error -> only show the error view and hide the others
+    * */
+
+    //Error view
+    AnimatedVisibility(
+        visible = detailsUiState == DetailsUiState.Error,
+        enter = fadeIn(),
+        exit = fadeOut()
+    ) {
+        CoinDetailsBox(
+            roundedCornerShape = roundedCornerShape,
+            contentAlignment = Alignment.Center
+        ) {
+            CoinDetailsError(tryAgainClicked = tryAgainClicked)
+        }
+    }
+
+
+    //Main details view
+    AnimatedVisibility(
+        visible = detailsUiState != DetailsUiState.Error,
+        enter = fadeIn(),
+        exit = fadeOut()
     ) {
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(20.dp)
+        CoinDetailsBox(
+            roundedCornerShape = roundedCornerShape,
         ) {
-            DisplayItem(
-                caption = stringResource(R.string.coin_details_caption_price),
-                value = price
-            )
-            DisplayItem(
-                caption = stringResource(R.string.coin_details_caption_change),
-                value = percentChange.formattedPercentage(),
-                textColor = if (percentChange.hasPercentageIncreased) Green else Red
-            )
 
-            HorizontalDivider(
-                color = Blue,
-                modifier = Modifier.padding(top = 15.dp, bottom = 10.dp)
-            )
-
-            DisplayItem(
-                caption = stringResource(R.string.coin_details_caption_market_cap),
-                value = marketCap
-            )
-            DisplayItem(
-                caption = stringResource(R.string.coin_details_caption_volume_24h),
-                value = volume24h
-            )
-            DisplayItem(
-                caption = stringResource(R.string.coin_details_caption_supply),
-                value = supply
+            CoinDetailsOverview(
+                price = price,
+                percentChange = percentChange,
+                marketCap = marketCap,
+                volume24h = volume24h,
+                supply = supply
             )
         }
+    }
 
-        AnimatedVisibility(
-            visible = detailsUiState == DetailsUiState.Loading,
-            enter = fadeIn(),
-            exit = fadeOut()
+
+    //Loading view
+    AnimatedVisibility(
+        visible = detailsUiState == DetailsUiState.Loading,
+        enter = fadeIn(),
+        exit = fadeOut()
+    ) {
+        CoinDetailsBox(
+            modifier = Modifier.background(CoinDetailsItemLoadingBackground),
+            contentAlignment = Alignment.Center,
+            roundedCornerShape = roundedCornerShape,
         ) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(CoinDetailsItemLoadingBackground, roundedCornerShape)
-            ) {
-                CircularProgressIndicator(
-                    modifier = Modifier.size(30.dp),
-                    strokeWidth = 3.dp,
-                    color = Blue
-                )
-            }
+            CircularProgressIndicator(
+                modifier = Modifier.size(30.dp),
+                strokeWidth = 3.dp,
+                color = Blue
+            )
         }
     }
 
@@ -195,14 +215,14 @@ private fun CoinsOverviewPreview() {
     val previewCoin = getPreviewCoin()
     CoinsDetailsView(
         DetailsUiState.NotLoading,
-        previewCoin.name?: NULL_VALUE_PLACEHOLDER,
+        previewCoin.name ?: NULL_VALUE_PLACEHOLDER,
         previewCoin.priceUsd.formattedPrice(),
         previewCoin.changePercent24Hr.formattedPercentage(),
         previewCoin.marketCapUsd.formattedPrice(),
         previewCoin.volumeUsd24Hr.formattedPrice(),
         previewCoin.supply.formattedPrice(),
         {}
-    )
+    ) {}
 }
 
 @Preview(showBackground = true, showSystemUi = true)
@@ -211,13 +231,23 @@ private fun CoinsOverviewLoadingPreview() {
     val previewCoin = getPreviewCoin()
     CoinsDetailsView(
         DetailsUiState.Loading,
-        previewCoin.name?: NULL_VALUE_PLACEHOLDER,
+        previewCoin.name ?: NULL_VALUE_PLACEHOLDER,
         previewCoin.priceUsd.formattedPrice(),
         previewCoin.changePercent24Hr.formattedPercentage(),
         previewCoin.marketCapUsd.formattedPrice(),
         previewCoin.volumeUsd24Hr.formattedPrice(),
         previewCoin.supply.formattedPrice(),
         {}
-    )
+    ) {}
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+private fun CoinsOverviewErrorPreview() {
+    CoinsDetailsView(
+        DetailsUiState.Error,
+        "", "", "", "", "", "",
+        {}
+    ) {}
 }
 
