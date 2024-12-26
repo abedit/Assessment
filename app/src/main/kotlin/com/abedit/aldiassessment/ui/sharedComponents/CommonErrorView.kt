@@ -1,8 +1,9 @@
-package com.abedit.aldiassessment.ui.coinDetailsComponents
+package com.abedit.aldiassessment.ui.sharedComponents
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -15,14 +16,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.abedit.aldiassessment.R
+import com.abedit.aldiassessment.ui.coinDetailsComponents.CoinDetailsBox
 import com.abedit.aldiassessment.ui.theme.Blue
 import com.abedit.aldiassessment.ui.theme.White
 
 /**
- * The error view in the details screen
+ * The error view in the list and details screen
  */
 @Composable
-fun CoinDetailsError(
+fun CommonErrorView(
+    errorMessage: String,
     tryAgainClicked: () -> Unit,
 ) {
     Column(
@@ -31,8 +34,9 @@ fun CoinDetailsError(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Error loading data",
-            fontSize = 16.sp
+            text = errorMessage,
+            fontSize = 16.sp,
+            modifier = Modifier.padding(16.dp)
         )
         Button(
             colors = ButtonDefaults.buttonColors(
@@ -54,6 +58,8 @@ fun CoinDetailsError(
 @Composable
 fun CoinDetailsErrorPreview() {
     CoinDetailsBox(roundedCornerShape = RoundedCornerShape(12.dp)) {
-        CoinDetailsError(tryAgainClicked = {})
+        CommonErrorView(
+            "error loading data",
+            tryAgainClicked = {})
     }
 }

@@ -21,7 +21,6 @@ fun String?.formattedPrice(): String {
     if (this.isNullOrBlank())
         return NULL_VALUE_PLACEHOLDER
 
-
     return try {
         val value = this.toDouble()
         when {
@@ -40,6 +39,7 @@ fun String?.formattedPrice(): String {
 fun String?.formattedPercentage(): String {
     if (this.isNullOrBlank())
         return NULL_VALUE_PLACEHOLDER
+
     return try {
         val value = this.toDouble()
         String.format(Locale.US, "%.2f%%", value)

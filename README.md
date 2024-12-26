@@ -18,12 +18,17 @@ A brief summary of the app:
 
 - I added a swipe to refresh mechanism in the list view.
 
+- I'm saving the scroll position in the list view after the automatic refresh is triggered.
+
 - The SVGs from figma weren't working, as if the extracted svg was malformed. Since i refused to import them as pngs, I downloaded the biggest PNG size, imported them in Illustrator and used its image trace to generate an SVG. I admit it's not an elegant solution. In a real scenario, I would have asked the designer for help.
 
 - If the icon is not present in figma, the "Blur On" icon from [Material Symbols & Icons](https://fonts.google.com/icons) is used as default.
 
 
 ## Tech stack
+
+The task was done on Windows 11 version 23H2.
+
 - Kotlin
 - Android Studio Koala | 2024.1.1 Patch 2
 - Jetpack Compose
@@ -42,10 +47,10 @@ A brief summary of the app:
 
 ## Instructions to run
 
-The following instructions were tested in a new environment (created a new user on my local machine and set up Android Studio as well as git)
+The following instructions were tested in a new environment (created a new user on my local machine and set up Android Studio as well as git).
 
 - Install Android Studio from [here](https://developer.android.com/studio)
 - Install Git from [here](https://git-scm.com/downloads)
-- Clone the repository using `git clone https://github.com/abedit/AldiAssessment.git`
+- Clone the repository using `git clone https://github.com/abedit/AldiAssessment.git` in a command line.
 - The Android Studio will make sure to download the SDK version 35 but in case it isn't, make sure to use the SDK helper tool in Android Studio to download the proper components. More info [here](https://developer.android.com/tools/releases/platforms)
 - Plug an Android device (mobile or tablet) and run

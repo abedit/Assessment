@@ -18,7 +18,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.Indicator
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
@@ -47,7 +46,6 @@ import com.abedit.aldiassessment.ui.theme.White
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CoinsList(
-    isRefreshing: Boolean,
     coinsList: List<Coin>,
     lazyColumnState: LazyListState,
     navigateToDetails: (Coin) -> Unit,
@@ -61,13 +59,16 @@ fun CoinsList(
     * */
     val state = rememberPullToRefreshState()
     PullToRefreshBox(
-        isRefreshing = isRefreshing,
+        //There's already a loading view set by the ListUiState
+        //so no need to handle the refresh state
+        isRefreshing = false,
         onRefresh = onRefresh,
         state = state,
         indicator = {
+            //Need to change the indicator color to Blue
             Indicator(
                 modifier = Modifier.align(Alignment.TopCenter),
-                isRefreshing = isRefreshing,
+                isRefreshing = false,
                 containerColor = White,
                 color = Blue,
                 state = state
@@ -221,7 +222,6 @@ private fun CoinPrice(
 private fun DefaultPreview() {
     Box(modifier = Modifier.background(CoinsListBackground)) {
         CoinsList(
-            isRefreshing = true,
             coinsList = listOf(getPreviewCoin(), getPreviewCoin(), getPreviewCoin()),
             lazyColumnState = rememberLazyListState(),
             navigateToDetails = {}, onRefresh = {}

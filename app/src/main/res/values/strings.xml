@@ -4,10 +4,7 @@
     <string name="overview_title">COINS</string>
     <string name="empty_coins_list_message">No coins were found</string>
     <string name="coins_overview_toolbar_title">COINS</string>
-    <string name="api_fetch_error_message">Error: fetching coins failed</string>
-    <string name="api_fetch_error_message_with_data">Error: fetching coins failed - showing cached results</string>
     <string name="coin_icon_description">Coin Icon</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="try_again">Try again</string>
 
     <string name="coin_details_caption_price">Price</string>
@@ -16,6 +13,7 @@
     <string name="coin_details_caption_volume_24h">Volume (24h)</string>
     <string name="coin_details_caption_supply">Supply</string>
     <string name="back_button_content_description">Go back to the list</string>
+    <string name="details_error_message">Error loading data</string>
 
 
 </resources>

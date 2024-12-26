@@ -8,6 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceTimeBy
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
@@ -104,6 +105,20 @@ class CoinListViewModelTest {
         // Start the refresh process and then stop it
         coinViewModel.resumeAutomaticRefresh()
         advanceTimeBy(AUTOMATIC_REFRESH_TIME * iterations)
+        coinViewModel.stopAutomaticRefresh()
+
+        verify(coinsRepository, times(iterations)).getCoinsList()
+    }
+
+    /*--------------------------manualRefreshTriggered-----------------------------*/
+
+
+    @Test
+    fun `manualRefreshTriggered - make sure the manual refresh triggers the fetch`() = runTest {
+        val iterations = 1
+        // Start the refresh process and then stop it
+        coinViewModel.manualRefreshTriggered()
+        advanceTimeBy(AUTOMATIC_REFRESH_TIME)
         coinViewModel.stopAutomaticRefresh()
 
         verify(coinsRepository, times(iterations)).getCoinsList()

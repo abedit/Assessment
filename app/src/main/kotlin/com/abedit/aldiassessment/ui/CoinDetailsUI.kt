@@ -18,16 +18,18 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.abedit.aldiassessment.NULL_VALUE_PLACEHOLDER
+import com.abedit.aldiassessment.R
 import com.abedit.aldiassessment.formattedPercentage
 import com.abedit.aldiassessment.formattedPrice
 import com.abedit.aldiassessment.getPreviewCoin
 import com.abedit.aldiassessment.states.DetailsUiState
 import com.abedit.aldiassessment.ui.coinDetailsComponents.CoinDetailsBox
-import com.abedit.aldiassessment.ui.coinDetailsComponents.CoinDetailsError
 import com.abedit.aldiassessment.ui.coinDetailsComponents.CoinDetailsOverview
+import com.abedit.aldiassessment.ui.sharedComponents.CommonErrorView
 import com.abedit.aldiassessment.ui.sharedComponents.Toolbar
 import com.abedit.aldiassessment.ui.theme.AldiAssessmentTheme
 import com.abedit.aldiassessment.ui.theme.Blue
@@ -110,7 +112,6 @@ private fun CoinsDetailsView(
 }
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun CoinDetailsView(
     detailsUiState: DetailsUiState,
@@ -137,7 +138,10 @@ private fun CoinDetailsView(
             roundedCornerShape = roundedCornerShape,
             contentAlignment = Alignment.Center
         ) {
-            CoinDetailsError(tryAgainClicked = tryAgainClicked)
+            CommonErrorView(
+                errorMessage = stringResource(id = R.string.details_error_message),
+                tryAgainClicked = tryAgainClicked
+            )
         }
     }
 

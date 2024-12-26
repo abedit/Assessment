@@ -1,4 +1,4 @@
-package com.abedit.aldiassessment.ui.coinsListComponents
+package com.abedit.aldiassessment.ui.sharedComponents
 
 import android.content.Context
 import androidx.compose.ui.test.assertHasClickAction
@@ -12,7 +12,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class EmptyListViewKtTest {
+class CommonErrorViewKtTest {
 
     @get:Rule val composeTestRule = createComposeRule()
     private lateinit var context: Context
@@ -24,19 +24,21 @@ class EmptyListViewKtTest {
 
     @Test
     fun emptyListView_showsMessageAndTryAgainButton() {
+        val errorMessage = context.getString(R.string.empty_coins_list_message)
         composeTestRule.setContent {
-            EmptyListView()
+            CommonErrorView(errorMessage) {}
         }
 
         //ensure message and button are shown
-        composeTestRule.onNodeWithText(context.getString(R.string.empty_coins_list_message))
+        composeTestRule.onNodeWithText(errorMessage)
         composeTestRule.onNodeWithText(context.getString(R.string.try_again))
     }
 
     @Test
     fun emptyListView_isClickable() {
+        val errorMessage = context.getString(R.string.empty_coins_list_message)
         composeTestRule.setContent {
-            EmptyListView()
+            CommonErrorView(errorMessage) {}
         }
 
         //check button is clickable
@@ -46,8 +48,11 @@ class EmptyListViewKtTest {
     @Test
     fun emptyListView_tryAgainButtonHasAction() {
         var tryAgainClicked = false
+        val errorMessage = context.getString(R.string.empty_coins_list_message)
         composeTestRule.setContent {
-            EmptyListView(tryAgainAction = { tryAgainClicked = true })
+            CommonErrorView(errorMessage) {
+                tryAgainClicked = true
+            }
         }
 
         //check button click does something

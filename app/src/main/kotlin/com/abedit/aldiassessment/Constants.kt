@@ -2,7 +2,7 @@ package com.abedit.aldiassessment
 
 import com.abedit.aldiassessment.models.Coin
 
-const val AUTOMATIC_REFRESH_TIME = 1000L * 60
+const val AUTOMATIC_REFRESH_TIME = 1000L * 7
 const val BASE_URL = "https://api.coincap.io/"
 const val GET_COINS_API = "v2/assets"
 const val GET_COINS_WITH_ID_API = "v2/assets/{id}"

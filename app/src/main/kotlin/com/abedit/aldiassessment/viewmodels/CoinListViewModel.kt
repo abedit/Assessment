@@ -1,14 +1,11 @@
 package com.abedit.aldiassessment.viewmodels
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.abedit.aldiassessment.ARGUMENT_COIN_JSON
 import com.abedit.aldiassessment.AUTOMATIC_REFRESH_TIME
 import com.abedit.aldiassessment.models.Coin
+import com.abedit.aldiassessment.states.ListUiState
 import com.abedit.aldiassessment.repositories.CoinsRepository
-import com.abedit.aldiassessment.states.DetailsUiState
-import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -19,26 +16,26 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CoinDetailsViewModel @Inject constructor(
-    savedState: SavedStateHandle,
+class CoinListViewModel @Inject constructor(
     private val repository: CoinsRepository
 ) : ViewModel() {
 
-    private val _currentCoin = MutableStateFlow<Coin>(
-        Gson().fromJson(savedState.get<String>(ARGUMENT_COIN_JSON), Coin::class.java)
-    )
-    val currentCoin: StateFlow<Coin> = _currentCoin
+    private val _coinsListStateFlow = MutableStateFlow<List<Coin>>(emptyList())
+
+    private val _listUiState = MutableStateFlow<ListUiState>(ListUiState.Loading)
+    val uiState: StateFlow<ListUiState> = _listUiState
 
     private var refreshJob: Job? = null
     private var fetchJob: Job? = null
 
-    private val _detailUiState = MutableStateFlow<DetailsUiState>(DetailsUiState.Loading)
-    val uiState: StateFlow<DetailsUiState> = _detailUiState
 
     /*
-    * Automatically fetch the coin info every 1 minute
+    * Automatically fetch the coins every 1 minute
     * */
     private fun startAutomaticRefresh() {
+        //cancel previous refresh job
+        refreshJob?.cancel()
+
         refreshJob = viewModelScope.launch {
             flow {
                 while (true) {
@@ -46,7 +43,7 @@ class CoinDetailsViewModel @Inject constructor(
                     delay(AUTOMATIC_REFRESH_TIME)
                 }
             }.collect {
-                fetchCoinInfo()
+                fetchCoins()
             }
         }
     }
@@ -67,30 +64,44 @@ class CoinDetailsViewModel @Inject constructor(
         refreshJob?.cancel()
     }
 
-    /*
-    * Call the API and update the DetailsUiState
-    * */
-    fun fetchCoinInfo() {
 
-        //cancel previous job
+    /*
+    * Refresh manually triggered (either swipe to refresh or the try again button)
+    * */
+    fun manualRefreshTriggered() {
+        //restart the countdown of the automatic refresh
+        //(it will call the fetch again anyway)
+        startAutomaticRefresh()
+    }
+
+    /*
+    * Call the API and update the listUiState and the list
+    * */
+    fun fetchCoins() {
+        //cancel previous fetch job
         fetchJob?.cancel()
 
-        // fetch the coin by ID
+        // fetch the coins
         fetchJob = viewModelScope.launch {
-            _detailUiState.value = DetailsUiState.Loading
-
+            _listUiState.value = ListUiState.Loading
             try {
-                val coinResponse = repository.getCoinById(_currentCoin.value.id)
-                _detailUiState.value = DetailsUiState.NotLoading
-                if (coinResponse != null) {
-                    _currentCoin.value = coinResponse
+                val coinsList = repository.getCoinsList()
+                if (coinsList.isEmpty()) {
+                    //show empty list view
+                    _listUiState.value = ListUiState.Empty
                 } else {
-                    _detailUiState.value = DetailsUiState.Error
+                    _coinsListStateFlow.value = coinsList
+                    _listUiState.value = ListUiState.Success(coinsList)
                 }
 
             } catch (e: Exception) {
-                _detailUiState.value = DetailsUiState.NotLoading
+                _listUiState.value = //if list is not empty, keep the data but change the state
+                    if (_coinsListStateFlow.value.isNotEmpty())
+                        ListUiState.ErrorListNotEmpty(_coinsListStateFlow.value)
+                    else
+                        ListUiState.Empty
             }
+
         }
 
     }
@@ -98,8 +109,8 @@ class CoinDetailsViewModel @Inject constructor(
     override fun onCleared() {
         super.onCleared()
         refreshJob?.cancel()
+        fetchJob?.cancel()
         refreshJob = null
+        fetchJob = null
     }
-
-
 }

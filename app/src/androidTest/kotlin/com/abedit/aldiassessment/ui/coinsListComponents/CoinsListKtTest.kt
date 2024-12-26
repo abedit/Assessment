@@ -25,7 +25,8 @@ class CoinsListKtTest {
             CoinsList(
                 coinsList = testCoins,
                 lazyColumnState = LazyListState(),
-                navigateToDetails = { clickedCoin = it }
+                navigateToDetails = { clickedCoin = it },
+                onRefresh = {}
             )
         }
 
