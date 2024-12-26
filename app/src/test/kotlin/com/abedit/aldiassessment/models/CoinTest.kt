@@ -1,6 +1,5 @@
 package com.abedit.aldiassessment.models
 
-import com.abedit.aldiassessment.models.Coin
 import org.junit.jupiter.api.Assertions.*
 
 import org.junit.jupiter.api.Test

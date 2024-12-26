@@ -17,14 +17,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -35,7 +32,6 @@ import com.abedit.aldiassessment.formattedPrice
 import com.abedit.aldiassessment.getPreviewCoin
 import com.abedit.aldiassessment.hasPercentageIncreased
 import com.abedit.aldiassessment.models.Coin
-import com.abedit.aldiassessment.ui.theme.CoinDisplayText
 import com.abedit.aldiassessment.ui.theme.CoinListItemBackground
 import com.abedit.aldiassessment.ui.theme.CoinsListBackground
 import com.abedit.aldiassessment.ui.theme.Green
@@ -48,6 +44,11 @@ fun CoinsList(
     navigateToDetails: (Coin) -> Unit
 ) {
     //show the list of coins
+    /*
+    * CoinItem structure
+    * Row
+    *   Icon  Column   Column
+    * */
     LazyColumn(
         state = lazyColumnState,
         modifier = Modifier
@@ -118,6 +119,8 @@ private fun CoinIcon(coinId: String, modifier: Modifier) {
     )
 }
 
+/*
+* For the name and symbol */
 @Composable
 private fun CoinBasicInfo(
     coinId: String,
@@ -130,28 +133,25 @@ private fun CoinBasicInfo(
             .fillMaxHeight(),
         verticalArrangement = Arrangement.Center
     ) {
-        Text(
-            text = coinId.uppercase(),
-            fontWeight = FontWeight.SemiBold,
-            maxLines = 1,
-            color = CoinDisplayText,
-            overflow = TextOverflow.Ellipsis,
-            fontSize = 19.sp,
+
+        ListDisplayText(
             modifier = Modifier
                 .padding(top = 4.dp, bottom = 4.dp),
+            text = coinId.uppercase(),
+            fontSize = 19.sp,
         )
 
-        Text(
-            text = coinSymbol,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            fontSize = 15.sp,
-            color = CoinDisplayText,
+        ListDisplayText(
             modifier = Modifier
                 .padding(top = 3.dp, bottom = 4.dp),
+            text = coinSymbol,
+            fontSize = 15.sp,
         )
     }
 }
+
+/*
+* For the price and percentage */
 
 @Composable
 private fun CoinPrice(
@@ -166,32 +166,27 @@ private fun CoinPrice(
             .fillMaxHeight(),
         verticalArrangement = Arrangement.Center
     ) {
-        Text(
-            text = coinPriceUsd,
-            fontWeight = FontWeight.SemiBold,
-            fontSize = 15.sp,
-            color = CoinDisplayText,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
+
+        ListDisplayText(
             modifier = Modifier
                 .align(Alignment.End)
                 .padding(top = 4.dp, bottom = 4.dp),
+            text = coinPriceUsd,
+            fontSize = 15.sp
+        )
 
-            )
-
-        Text(
-            text = coinChangePercent,
-            fontWeight = FontWeight.SemiBold,
-            fontSize = 15.sp,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
+        ListDisplayText(
             modifier = Modifier
                 .align(Alignment.End)
-                .padding(top = 0.dp, bottom = 4.dp),
-            color = if (hasIncreased) Green else Red
+                .padding(top = 2.dp, bottom = 4.dp),
+            text = coinChangePercent,
+            fontSize = 15.sp,
+            textColor = if (hasIncreased) Green else Red
         )
     }
 }
+
+
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable

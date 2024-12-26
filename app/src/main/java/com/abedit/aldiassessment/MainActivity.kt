@@ -28,6 +28,8 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        //For the status bar color
         enableEdgeToEdge(
             statusBarStyle = SystemBarStyle.light(
                 ContextCompat.getColor(
@@ -43,10 +45,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-sealed class Screen(val route: String) {
-    data object List: Screen("list_screen")
-    data object Details: Screen("detail_screen")
-}
+
 
 @Composable
 fun CoinAppNavigation() {
@@ -54,7 +53,7 @@ fun CoinAppNavigation() {
 
     NavHost(navController = navController, startDestination = Screen.List.route) {
 
-        //List view
+        /*************  List screen  ********/
         composable(route = Screen.List.route) {
             val coinListViewModel: CoinListViewModel = hiltViewModel()
             val gson = Gson()
@@ -78,7 +77,7 @@ fun CoinAppNavigation() {
 
         }
 
-        //Details screen
+        /*************  Details screen  ********/
         composable(
             route = Screen.Details.route + "?$ARGUMENT_COIN_JSON={$ARGUMENT_COIN_JSON}",
             arguments = listOf(navArgument(ARGUMENT_COIN_JSON) { type = NavType.StringType })

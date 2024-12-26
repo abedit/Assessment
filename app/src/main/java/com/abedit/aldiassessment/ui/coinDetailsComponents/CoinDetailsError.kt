@@ -18,6 +18,9 @@ import com.abedit.aldiassessment.R
 import com.abedit.aldiassessment.ui.theme.Blue
 import com.abedit.aldiassessment.ui.theme.White
 
+/**
+ * The error view in the details screen
+ */
 @Composable
 fun CoinDetailsError(
     tryAgainClicked: () -> Unit,

@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -60,8 +61,9 @@ fun Toolbar(
         AnimatedVisibility(
             visible = backButtonClicked != null
         ) {
-            //I prefer to have the back button take the clickable
-            // area to have the entire height of the toolbar
+            /*I prefer to have the clickable area of the back
+            * button to have the entire height of the toolbar
+            * hence the Box */
             Box(
                 modifier = Modifier
                     .fillMaxHeight()
@@ -83,7 +85,7 @@ fun Toolbar(
                         .fillMaxHeight(),
                     painter = painterResource(R.drawable.arrow_back),
                     tint = Color.Black,
-                    contentDescription = title,
+                    contentDescription = stringResource(R.string.back_button_content_description),
                 )
             }
 

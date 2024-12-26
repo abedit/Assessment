@@ -20,6 +20,9 @@ import com.abedit.aldiassessment.ui.theme.CoinsDetailsBackground
 import com.abedit.aldiassessment.ui.theme.Green
 import com.abedit.aldiassessment.ui.theme.Red
 
+/*
+* Details UI with the info
+* */
 @Composable
 fun CoinDetailsOverview(
     price: String,
@@ -33,6 +36,13 @@ fun CoinDetailsOverview(
             .fillMaxSize()
             .padding(20.dp)
     ) {
+
+        /**
+         * DisplayItem x 2
+         * Divider
+         * DisplayItem x 3
+         * */
+
         DetailDisplayItem(
             caption = stringResource(R.string.coin_details_caption_price),
             value = price

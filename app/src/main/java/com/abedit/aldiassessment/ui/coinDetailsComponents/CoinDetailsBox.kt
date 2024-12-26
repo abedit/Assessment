@@ -12,6 +12,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.abedit.aldiassessment.ui.theme.CoinDetailsItemBackground
 
+/**
+ * The rounded box in the details screen
+ */
 @Composable
 fun CoinDetailsBox(
     modifier: Modifier = Modifier,
@@ -29,6 +32,8 @@ fun CoinDetailsBox(
         content()
     }
 }
+
+
 
 @Preview
 @Composable

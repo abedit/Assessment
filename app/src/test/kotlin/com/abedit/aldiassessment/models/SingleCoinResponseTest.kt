@@ -1,6 +1,5 @@
 package com.abedit.aldiassessment.models
 
-import com.abedit.aldiassessment.models.SingleCoinResponse
 import com.google.gson.Gson
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull

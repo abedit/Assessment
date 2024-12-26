@@ -13,15 +13,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.pulltorefresh.PullToRefreshBox
-import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -61,7 +55,6 @@ fun CoinDetailsView(viewModel: CoinDetailsViewModel, backButtonClicked: () -> Un
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun CoinsDetailsView(
     detailsUiState: DetailsUiState,
@@ -73,8 +66,6 @@ private fun CoinsDetailsView(
     backButtonClicked: () -> Unit,
     tryAgainClicked: () -> Unit
 ) {
-    val pullToRefreshState = rememberPullToRefreshState()
-    var isRefreshing by remember { mutableStateOf(false) }
 
     AldiAssessmentTheme {
         Scaffold { innerPadding ->
@@ -98,33 +89,20 @@ private fun CoinsDetailsView(
                 )
 
 
-//                LaunchedEffect(detailsUiState) {
-//                    isRefreshing = false
-//                }
-
-                PullToRefreshBox(
-                    isRefreshing = isRefreshing,
-                    onRefresh = {
-                        isRefreshing = true
-                        tryAgainClicked.invoke()
-                    },
-                    state = pullToRefreshState,
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(CoinsDetailsBackground)
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(CoinsDetailsBackground)
-                    ) {
-                        CoinDetailsView(
-                            detailsUiState = detailsUiState,
-                            price = price,
-                            percentChange = percentChange,
-                            marketCap = marketCap,
-                            volume24h = volume24h,
-                            supply = supply,
-                            tryAgainClicked = tryAgainClicked
-                        )
-                    }
+                    CoinDetailsView(
+                        detailsUiState = detailsUiState,
+                        price = price,
+                        percentChange = percentChange,
+                        marketCap = marketCap,
+                        volume24h = volume24h,
+                        supply = supply,
+                        tryAgainClicked = tryAgainClicked
+                    )
                 }
             }
         }

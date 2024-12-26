@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.random.Random
 
 @HiltViewModel
 class CoinListViewModel @Inject constructor(
@@ -73,6 +74,7 @@ class CoinListViewModel @Inject constructor(
             try {
                 val coinsList = repository.getCoinsList()
                 if (coinsList.isEmpty()) {
+                    //show empty list view
                     _listUiState.value = ListUiState.Empty
                 } else {
                     _coinsListStateFlow.value = coinsList
@@ -80,7 +82,7 @@ class CoinListViewModel @Inject constructor(
                 }
 
             } catch (e: Exception) {
-                _listUiState.value =
+                _listUiState.value = //if list is not empty, keep the data but change the state
                     if (_coinsListStateFlow.value.isNotEmpty())
                         ListUiState.ErrorListNotEmpty(_coinsListStateFlow.value)
                     else

@@ -7,12 +7,10 @@ import com.abedit.aldiassessment.services.CoinService
 import kotlinx.coroutines.runBlocking
 import okhttp3.MediaType
 import okhttp3.ResponseBody
-import org.junit.Before
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.runner.RunWith
-import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
@@ -61,7 +59,7 @@ class CoinsRepositoryTest {
             coinsRepository.getCoinsList()
         }.message
 
-        assertTrue(!exceptionMessage.isNullOrEmpty() && exceptionMessage.contains("fetching coins failed"));
+        assertTrue(!exceptionMessage.isNullOrEmpty() && exceptionMessage.contains("fetching coins failed"))
     }
 
 
@@ -106,6 +104,6 @@ class CoinsRepositoryTest {
             coinsRepository.getCoinById("")
         }.message
 
-        assertTrue(!exceptionMessage.isNullOrEmpty() && exceptionMessage.contains("fetching coin info failed"));
+        assertTrue(!exceptionMessage.isNullOrEmpty() && exceptionMessage.contains("fetching coin info failed"))
     }
 }

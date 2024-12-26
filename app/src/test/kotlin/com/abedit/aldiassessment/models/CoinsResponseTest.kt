@@ -1,10 +1,7 @@
 package com.abedit.aldiassessment.models
 
-import com.abedit.aldiassessment.models.CoinsResponse
-import com.abedit.aldiassessment.models.SingleCoinResponse
 import com.google.gson.Gson
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
