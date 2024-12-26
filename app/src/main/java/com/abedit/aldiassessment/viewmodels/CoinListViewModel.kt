@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.random.Random
 
 @HiltViewModel
 class CoinListViewModel @Inject constructor(
@@ -23,6 +22,9 @@ class CoinListViewModel @Inject constructor(
 
     private val _coinsListStateFlow = MutableStateFlow<List<Coin>>(emptyList())
     private val _listUiState = MutableStateFlow<ListUiState>(ListUiState.Loading)
+
+    private val _isRefreshing = MutableStateFlow(false)
+    val refreshing: StateFlow<Boolean> = _isRefreshing
 
     val uiState: StateFlow<ListUiState> = _listUiState
 
@@ -34,6 +36,9 @@ class CoinListViewModel @Inject constructor(
     * Automatically fetch the coins every 1 minute
     * */
     private fun startAutomaticRefresh() {
+        //cancel previous refresh job
+        refreshJob?.cancel()
+
         refreshJob = viewModelScope.launch {
             flow {
                 while (true) {
@@ -62,11 +67,25 @@ class CoinListViewModel @Inject constructor(
         refreshJob?.cancel()
     }
 
+
+    /*
+    * Refresh manually triggered
+    * */
+    fun manualRefreshTriggered() {
+        _isRefreshing.value = true
+
+        //restart the countdown of the automatic refresh
+        //(it will call the fetch again anyway)
+        startAutomaticRefresh()
+    }
+
     /*
     * Call the API and update the listUiState and the list
     * */
     fun fetchCoins() {
+        //cancel previous fetch job
         fetchJob?.cancel()
+
         // fetch the coins
         fetchJob = viewModelScope.launch {
             _listUiState.value = ListUiState.Loading
@@ -88,6 +107,8 @@ class CoinListViewModel @Inject constructor(
                     else
                         ListUiState.Empty
             }
+
+            _isRefreshing.value = false
         }
 
     }
@@ -95,6 +116,8 @@ class CoinListViewModel @Inject constructor(
     override fun onCleared() {
         super.onCleared()
         refreshJob?.cancel()
+        fetchJob?.cancel()
         refreshJob = null
+        fetchJob = null
     }
 }

@@ -1,5 +1,7 @@
 package com.abedit.aldiassessment
 
+import com.abedit.aldiassessment.models.Coin
+import com.abedit.aldiassessment.states.ListUiState
 import java.util.Locale
 
 //to get the drawable ID depending on the coin ID
@@ -43,5 +45,15 @@ fun String?.formattedPercentage(): String {
         String.format(Locale.US, "%.2f%%", value)
     } catch (e: NumberFormatException) {
         this
+    }
+}
+
+
+//Get the items in a ListUiState without the need to cast the Ui state in compose
+fun ListUiState.getItems(): List<Coin> {
+    return when (this) {
+        is ListUiState.Success -> items
+        is ListUiState.ErrorListNotEmpty -> items
+        else -> emptyList()
     }
 }

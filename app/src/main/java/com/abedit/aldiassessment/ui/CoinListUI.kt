@@ -28,6 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.abedit.aldiassessment.R
+import com.abedit.aldiassessment.getItems
 import com.abedit.aldiassessment.getPreviewCoin
 import com.abedit.aldiassessment.models.Coin
 import com.abedit.aldiassessment.states.ListUiState
@@ -44,18 +45,23 @@ import com.abedit.aldiassessment.viewmodels.CoinListViewModel
 @Composable
 fun CoinsListView(coinListViewModel: CoinListViewModel, navigateToDetails: (Coin) -> Unit) {
     val listUiState by coinListViewModel.uiState.collectAsState()
+    val refreshing by coinListViewModel.refreshing.collectAsState()
     CoinsListView(
+        isRefreshing = refreshing,
         listUiState = listUiState,
         tryAgainAction = { coinListViewModel.fetchCoins() },
-        navigateToDetails = navigateToDetails
+        navigateToDetails = navigateToDetails,
+        onRefresh = { coinListViewModel.manualRefreshTriggered() }
     )
 }
 
 @Composable
 private fun CoinsListView(
+    isRefreshing: Boolean,
     listUiState: ListUiState,
     tryAgainAction: () -> Unit = {},
-    navigateToDetails: (Coin) -> Unit = {}
+    navigateToDetails: (Coin) -> Unit = {},
+    onRefresh: () -> Unit = {}
 ) {
 
     val snackbarHostState = remember { SnackbarHostState() }
@@ -89,10 +95,12 @@ private fun CoinsListView(
                         .background(CoinsListBackground)
                 ) {
                     CoinsView(
+                        isRefreshing = isRefreshing,
                         listUiState = listUiState,
                         tryAgainAction = tryAgainAction,
                         lazyColumnState = lazyColumnState,
-                        navigateToDetails = navigateToDetails
+                        navigateToDetails = navigateToDetails,
+                        onRefresh = onRefresh
                     )
                 }
 
@@ -116,10 +124,12 @@ private fun CoinsListView(
 //The main view for the list and the progress indicator
 @Composable
 private fun CoinsView(
+    isRefreshing: Boolean,
     listUiState: ListUiState,
     tryAgainAction: () -> Unit,
     lazyColumnState: LazyListState,
-    navigateToDetails: (Coin) -> Unit
+    navigateToDetails: (Coin) -> Unit,
+    onRefresh: () -> Unit
 ) {
 
     // show progress indicator if list is empty
@@ -147,22 +157,17 @@ private fun CoinsView(
         exit = fadeOut(),
     ) {
         when (listUiState) {
-            is ListUiState.Success -> {
+            is ListUiState.Success, is ListUiState.ErrorListNotEmpty -> {
                 CoinsList(
-                    coinsList = listUiState.items,
+                    isRefreshing = isRefreshing,
+                    coinsList = listUiState.getItems(),
                     lazyColumnState = lazyColumnState,
-                    navigateToDetails = navigateToDetails
+                    navigateToDetails = navigateToDetails,
+                    onRefresh = onRefresh
                 )
             }
-
-            is ListUiState.ErrorListNotEmpty -> CoinsList(
-                coinsList = listUiState.items,
-                lazyColumnState = lazyColumnState,
-                navigateToDetails = navigateToDetails
-            )
-
             is ListUiState.Empty -> EmptyListView(tryAgainAction = tryAgainAction)
-            else -> {} //Loading - already handled
+            else -> {} // Loading - already handled
         }
     }
 
@@ -173,6 +178,7 @@ private fun CoinsView(
 @Composable
 private fun CoinsOverviewSuccessPreview() {
     CoinsListView(
+        false,
         listUiState = ListUiState.Success(
             listOf(
                 getPreviewCoin(),
@@ -186,11 +192,11 @@ private fun CoinsOverviewSuccessPreview() {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun CoinsOverviewLoadingPreview() {
-    CoinsListView(listUiState = ListUiState.Loading)
+    CoinsListView(false, listUiState = ListUiState.Loading)
 }
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun CoinsOverviewEmptyPreview() {
-    CoinsListView(listUiState = ListUiState.Empty)
+    CoinsListView(false, listUiState = ListUiState.Empty)
 }

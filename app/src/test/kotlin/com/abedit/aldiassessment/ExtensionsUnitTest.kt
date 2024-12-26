@@ -1,5 +1,7 @@
 package com.abedit.aldiassessment
 
+import com.abedit.aldiassessment.models.Coin
+import com.abedit.aldiassessment.states.ListUiState
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
 
@@ -152,6 +154,38 @@ class ExtensionsUnitTest {
     fun `formattedPercentage return same string for non-numerical strings`() {
         val stringValue = "price increased a lot btw"
         assertEquals(stringValue, stringValue.formattedPercentage())
+    }
+
+
+    //------------------------------getItems------------------------------------
+
+
+    @Test
+    fun `getItems return items when state is Success`() {
+        val coins = listOf(Coin("Bitcoin"), Coin("Ethereum"))
+        val state = ListUiState.Success(coins)
+
+        assertEquals(coins, state.getItems())
+    }
+
+    @Test
+    fun `getItems return items when state is ErrorListNotEmpty`() {
+        val coins = listOf(Coin("Bitcoin"), Coin("Ethereum"))
+        val state = ListUiState.ErrorListNotEmpty(coins)
+
+        assertEquals(coins, state.getItems())
+    }
+
+    @Test
+    fun `getItems return empty list when state is Loading`() {
+        val state = ListUiState.Loading
+        assertEquals(emptyList<Coin>(), state.getItems())
+    }
+
+    @Test
+    fun `getItems return empty list when state is Empty`() {
+        val state = ListUiState.Empty
+        assertEquals(emptyList<Coin>(), state.getItems())
     }
 
 }

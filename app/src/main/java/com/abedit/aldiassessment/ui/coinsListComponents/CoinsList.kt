@@ -16,7 +16,12 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.Indicator
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,16 +37,21 @@ import com.abedit.aldiassessment.formattedPrice
 import com.abedit.aldiassessment.getPreviewCoin
 import com.abedit.aldiassessment.hasPercentageIncreased
 import com.abedit.aldiassessment.models.Coin
+import com.abedit.aldiassessment.ui.theme.Blue
 import com.abedit.aldiassessment.ui.theme.CoinListItemBackground
 import com.abedit.aldiassessment.ui.theme.CoinsListBackground
 import com.abedit.aldiassessment.ui.theme.Green
 import com.abedit.aldiassessment.ui.theme.Red
+import com.abedit.aldiassessment.ui.theme.White
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CoinsList(
+    isRefreshing: Boolean,
     coinsList: List<Coin>,
     lazyColumnState: LazyListState,
-    navigateToDetails: (Coin) -> Unit
+    navigateToDetails: (Coin) -> Unit,
+    onRefresh: () -> Unit
 ) {
     //show the list of coins
     /*
@@ -49,20 +59,38 @@ fun CoinsList(
     * Row
     *   Icon  Column   Column
     * */
-    LazyColumn(
-        state = lazyColumnState,
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 15.dp, vertical = 6.dp)
+    val state = rememberPullToRefreshState()
+    PullToRefreshBox(
+        isRefreshing = isRefreshing,
+        onRefresh = onRefresh,
+        state = state,
+        indicator = {
+            Indicator(
+                modifier = Modifier.align(Alignment.TopCenter),
+                isRefreshing = isRefreshing,
+                containerColor = White,
+                color = Blue,
+                state = state
+            )
+        },
+
     ) {
-        items(items = coinsList) { mCoin ->
-            CoinListItem(
-                mCoin = mCoin,
-                modifier = Modifier.clickable {
-                    navigateToDetails(mCoin)
-                })
+        LazyColumn(
+            state = lazyColumnState,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 15.dp, vertical = 6.dp)
+        ) {
+            items(items = coinsList) { mCoin ->
+                CoinListItem(
+                    mCoin = mCoin,
+                    modifier = Modifier.clickable {
+                        navigateToDetails(mCoin)
+                    })
+            }
         }
     }
+
 }
 
 @Composable
@@ -193,9 +221,10 @@ private fun CoinPrice(
 private fun DefaultPreview() {
     Box(modifier = Modifier.background(CoinsListBackground)) {
         CoinsList(
+            isRefreshing = true,
             coinsList = listOf(getPreviewCoin(), getPreviewCoin(), getPreviewCoin()),
             lazyColumnState = rememberLazyListState(),
-            navigateToDetails = {}
+            navigateToDetails = {}, onRefresh = {}
         )
     }
 
