@@ -12,7 +12,9 @@ A brief summary of the app:
 ## Notes
 - The coins are already sorted in ascending order according to [https://docs.coincap.io](https://docs.coincap.io/) and there was an option to send a parameter to the API to limit the results to 10. No sorting or truncation was needed from the app side.
 
-- I implemented a snackbar that shows up if trying to load the list if the API call is not successful.
+- I added an "Empty view" for the list and details. Basically if no data is returned for the list/details, there will be a text and a "try again" button to fetch the data again.
+
+- If calling the API fails (because of bad internet or API is down) and the list is already loaded (for exmaple, the automatic refresh failed), a snackbar is shown, informing the user that they are viewing cached results. The automatic refresh will run again in 1 minute.
 
 - I added a swipe to refresh mechanism in the list view.
 
@@ -20,7 +22,30 @@ A brief summary of the app:
 
 - If the icon is not present in figma, the "Blur On" icon from [Material Symbols & Icons](https://fonts.google.com/icons) is used as default.
 
+
+## Tech stack
+- Kotlin
+- Android Studio Koala | 2024.1.1 Patch 2
+- Jetpack Compose
+- Retrofit
+- Coroutines
+- JUnit5
+- Mockito
+- Hilt
+- Gson
+- Jetpack Navigation
+- Compile SDK version 35
+- Min SDK version 26
+
+
 ---
 
 ## Instructions to run
 
+The following instructions were tested in a new environment (created a new user on my local machine and set up Android Studio as well as git)
+
+- Install Android Studio from [here](https://developer.android.com/studio)
+- Install Git from [here](https://git-scm.com/downloads)
+- Clone the repository using `git clone https://github.com/abedit/AldiAssessment.git`
+- The Android Studio will make sure to download the SDK version 35 but in case it isn't, make sure to use the SDK helper tool in Android Studio to download the proper components. More info [here](https://developer.android.com/tools/releases/platforms)
+- Plug an Android device (mobile or tablet) and run
