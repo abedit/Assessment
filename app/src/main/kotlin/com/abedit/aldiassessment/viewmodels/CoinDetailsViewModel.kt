@@ -79,7 +79,6 @@ class CoinDetailsViewModel @Inject constructor(
         fetchJob = viewModelScope.launch {
             _detailUiState.value = DetailsUiState.Loading
 
-            delay(1500)
             try {
                 val coinResponse = repository.getCoinById(_currentCoin.value.id)
                 _detailUiState.value = DetailsUiState.NotLoading

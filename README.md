@@ -14,13 +14,13 @@ A brief summary of the app:
 
 - I added an "Empty view" for the list and details. Basically if no data is returned for the list/details, there will be a text and a "try again" button to fetch the data again.
 
-- If calling the API fails (because of bad internet or API is down) and the list is already loaded (for exmaple, the automatic refresh failed), a snackbar is shown, informing the user that they are viewing cached results. The automatic refresh will run again in 1 minute.
+- If calling the API fails (because of bad internet or API is down) and the list is already loaded (for example, the automatic refresh failed), the list won't disappear and the cached results will be displayed. The automatic refresh will run again in 1 minute.
 
-- I added a swipe to refresh mechanism in the list view.
+- I added a swipe to refresh mechanism in the list view. Upon using it to refresh, the "loading" view is shown (to comply with the screen designs).
 
 - I'm saving the scroll position in the list view after the automatic refresh is triggered.
 
-- The SVGs from figma weren't working, as if the extracted svg was malformed. Since i refused to import them as pngs, I downloaded the biggest PNG size, imported them in Illustrator and used its image trace to generate an SVG. I admit it's not an elegant solution. In a real scenario, I would have asked the designer for help.
+- The SVGs from figma weren't working, as if the extracted svg was malformed. Since I refused to import them as pngs, I downloaded the biggest PNG size, imported them in Adobe Illustrator and used its image trace to generate an SVG. I admit it's not an elegant solution. In a real scenario, I would have asked the designer for help.
 
 - If the icon is not present in figma, the "Blur On" icon from [Material Symbols & Icons](https://fonts.google.com/icons) is used as default.
 
