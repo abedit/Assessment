@@ -28,9 +28,10 @@ A brief summary of the app:
 ## Tech stack
 
 The task was done on Windows 11 version 23H2.
+**IDE**: Android Studio Koala | 2024.1.1 Patch 2
 
+**Libraries:**
 - Kotlin
-- Android Studio Koala | 2024.1.1 Patch 2
 - Jetpack Compose
 - Retrofit
 - Coroutines
@@ -49,8 +50,33 @@ The task was done on Windows 11 version 23H2.
 
 The following instructions were tested in a new environment (created a new user on my local machine and set up Android Studio as well as git).
 
-- Install Android Studio from [here](https://developer.android.com/studio)
-- Install Git from [here](https://git-scm.com/downloads)
-- Clone the repository using `git clone https://github.com/abedit/AldiAssessment.git` in a command line.
+Pre-requisites:
+- **Android Studio**: Install Android Studio from [here](https://developer.android.com/studio)
+- **Git:** Install Android Studio from [here](https://developer.android.com/studio)
+
+  Confirm the installation was a success by running `git --version` in a command line or terminal
+
+**Steps:**
+- In an empty folder or desktop, open a command line/terminal. (On Windows, you can press `SHIFT` and `right click on the mouse` then select `Open in Terminal`.)
+- Write `git clone https://github.com/abedit/AldiAssessment.git` in a command line. It will clone the repository in your directory. You should see a folder named "AldiAssessment".
+- Launch Android Studio and select **Open**. Navigate to the "AldiAssessment" folder and select it.
 - The Android Studio will make sure to download the SDK version 35 but in case it isn't, make sure to use the SDK helper tool in Android Studio to download the proper components. More info [here](https://developer.android.com/tools/releases/platforms)
-- Plug an Android device (mobile or tablet) and run
+
+  You can go to Tools > SDK Manager then click on "SDK Tools".
+  
+  If "35.0.0" is already checked then all is good.
+  
+  Otherwise, select "35.0.0" and hit "Ok". Follow the instructions to download the SDK version 35.
+
+- Plug an Android device (mobile or tablet) or create an emulator using Android Studio's AVD Manager.
+  If you're using a real device, make sure `USB Debugging` is enabled in the device's settings under "Developer Options".
+
+- Use the "Run" button in Android Studio to run the project on the device.
+
+**Unit Tests**
+
+In Android Studio, you can navigate to the directory on the left under `app > kotlin` and right click on `com.abedit.aldiassessment (test)` then `Run 'Tests in com.abedit...'`
+
+**Instrumented Tests**
+
+In Android Studio, you can navigate to the directory on the left under `app > kotlin` and right click on `com.abedit.aldiassessment (androidTest)` then `Run 'Tests in com.abedit...'`
