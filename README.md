@@ -28,6 +28,7 @@ A brief summary of the app:
 ## Tech stack
 
 The task was done on Windows 11 version 23H2.
+
 **IDE**: Android Studio Koala | 2024.1.1 Patch 2
 
 **Libraries:**
