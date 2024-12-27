@@ -70,7 +70,7 @@ Pre-requisites:
   Otherwise, select "35.0.0" and hit "Ok". Follow the instructions to download the SDK version 35.
 
 - Plug an Android device (mobile or tablet) or create an emulator using Android Studio's AVD Manager.
-  If you're using a real device, make sure `USB Debugging` is enabled in the device's settings under "Developer Options".
+  If you're using a real device, make sure `USB Debugging` is enabled in the device's settings under `Developper Options`. Click "Ok" on the popup asking you to trust your computer.
 
 - Use the "Run" button in Android Studio to run the project on the device.
 
