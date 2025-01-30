@@ -7,7 +7,6 @@ A brief summary of the app:
 - Load a list of the top 10 ranked coins from the [CoinCap REST API](https://docs.coincap.io/)
 - Upon clicking on an list item, display more details about the Coin
 - The data are to be refresh automatically every 60 seconds
-- The app must follow the screen designs provided.
 
 
 
