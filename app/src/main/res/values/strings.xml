@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AldiAssessment</string>
+    <string name="app_name">SimpleCoinApp</string>
 
     <string name="overview_title">COINS</string>
     <string name="empty_coins_list_message">No coins were found</string>

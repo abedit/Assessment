@@ -1,5 +1,5 @@
 
-# Simple Coin List
+# Simple Coin List & Details App
 
 This is a simple coin list app as I wanted to test the dependency injection using Hilt and the Navigation component with Compose.
 

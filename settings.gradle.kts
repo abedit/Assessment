@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Aldi Assessment"
+rootProject.name = "Simple Coin List & Details App"
 include(":app")
  

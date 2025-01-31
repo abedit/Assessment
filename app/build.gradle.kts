@@ -8,11 +8,11 @@ plugins {
 }
 
 android {
-    namespace = "com.abedit.aldiassessment"
+    namespace = "com.abedit.simplecoinapp"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.abedit.aldiassessment"
+        applicationId = "com.abedit.simplecoinapp"
         minSdk = 26
         targetSdk = 35
         versionCode = 1
